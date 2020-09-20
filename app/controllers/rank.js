@@ -2,6 +2,10 @@ const logger = require("../modules/log.js");
 module.exports = function({ models, api }) {
 	const User = models.use("user");
 	const FACTOR = 3;
+  
+  	async function getP(uid) {
+		return (await User.findOne({ where: { uid } })).get({ plain: true }).point;
+	}
 
 	function getPoint(uid) {
 		return User.findOne({
@@ -99,6 +103,7 @@ function getpoint(uid) {
 
 	return {
 		getPoint,
+    getP,
 		updatePoint,
 		setPoint,
 		getpoint,
