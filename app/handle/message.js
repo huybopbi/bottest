@@ -829,8 +829,8 @@ if (contentMessage =='huấn'){
     if (contentMessage =='headshot') { var callback = () => api.sendMessage({body: "", attachment: fs.createReadStream(__dirname + "/src/say.mp3")}, threadID, () => fs.unlinkSync(__dirname + "/src/say.mp3"));
        return request(`http://apibot.7m.pl/nhac/headshot.mp3`).pipe(fs.createWriteStream(__dirname+'/src/say.mp3')).on('close',() => callback())
      }
-     if (contentMessage =='up') { var callback = () => api.sendMessage({body: "", attachment: fs.createReadStream(__dirname + "/src/levelup.gif")}, threadID, () => fs.unlinkSync(__dirname + "/src/levelup.gif"));
-       return request(`https://cdn.glitch.com/9afd8b38-353a-4182-8710-815ca2d27419%2Flevelup.gif?v=1600584859785`).pipe(fs.createWriteStream(__dirname+'/src/levelup.gif')).on('close',() => callback())
+     if (contentMessage =='up') { var callback = () => api.sendMessage({body: "", attachment: fs.createReadStream(__dirname + "/src/levelupp.gif")}, threadID, () => fs.unlinkSync(__dirname + "/src/levelup.gif"));
+       return request(`https://cdn.glitch.com/9afd8b38-353a-4182-8710-815ca2d27419%2Flevelup.gif?v=1600584859785`).pipe(fs.createWriteStream(__dirname+'/src/levelupp.gif')).on('close',() => callback())
      }
     //meow
 		if (contentMessage.indexOf(`${prefix}meow`) == 0)
@@ -1423,86 +1423,6 @@ if (contentMessage.indexOf(`${prefix}all`) == 0)
 		}
 
 	/* ==================== NSFW Commands ==================== */
-
-		//nhentai search
-		if (contentMessage.indexOf(`${prefix}nhentai`) == 0) {
-			if (__GLOBAL.NSFWBlocked.includes(threadID)) return api.sendMessage("Nhóm này đang bị tắt NSFW!", threadID, messageID);
-			let id = contentMessage.slice(prefix.length + 8, contentMessage.length).trim();
-			if (!id) return api.sendMessage(`Code lý tưởng để bắn tung toé là: ${Math.floor(Math.random() * 99999)}`, threadID, messageID);
-			return request(`https://nhentai.net/api/gallery/${id}`, (error, response, body) => {
-				var codeData = JSON.parse(body);
-				if (codeData.error == true) return api.sendMessage("Không tìm thấy truyện này", threadID, messageID);
-				let title = codeData.title.pretty;
-				let tagList = [];
-				let artistList = [];
-				let characterList = [];
-				codeData.tags.forEach(item => (item.type == "tag") ? tagList.push(item.name) : (item.type == "artist") ? artistList.push(item.name) : (item.type == "character") ? characterList.push(item.name) : '');
-				var tags = tagList.join(', ');
-				var artists = artistList.join(', ');
-				var characters = characterList.join(', ');
-				if (characters == '') characters = 'Original';
-				api.sendMessage("Tiêu đề: " + title, threadID, () => {
-					api.sendMessage("Tác giả: " + artists, threadID, () => {
-						api.sendMessage("Nhân vật: " + characters, threadID, () => {
-							api.sendMessage("Tags: " + tags, threadID, () => {
-								api.sendMessage("Link: https://nhentai.net/g/" + id, threadID);
-							});
-						});
-					});
-				}, messageID);
-			});
-		}
-
-		//hentaivn
-		if (contentMessage.indexOf(`${prefix}hentaivn`) == 0) {
-			if (__GLOBAL.NSFWBlocked.includes(threadID)) return api.sendMessage("Nhóm này đang bị tắt NSFW!", threadID, messageID);
-			const cheerio = require('cheerio');
-			var id = contentMessage.slice(prefix.length + 9, contentMessage.length);
-			if (!id) return api.sendMessage("Nhập id!", threadID, messageID);
-			if (!id) return api.sendMessage(`Code lý tưởng để bắn tung toé là: ${Math.floor(Math.random() * 21553)}`, threadID, messageID);
-			axios.get(`https://hentaivn.net/id${id}`).then((response) => {
-				if (response.status == 200) {
-					const html = response.data;
-					const $ = cheerio.load(html);
-					var getContainer = $('div.container');
-					var getURL = getContainer.find('form').attr('action');
-					if (getURL == `https://hentaivn.net/${id}-doc-truyen-.html`) return api.sendMessage("Không tìm thấy truyện này", threadID, messageID);
-					axios.get(getURL).then((response) => {
-						if (response.status == 200) {
-							const html = response.data;
-							const $ = cheerio.load(html);
-							var getInfo = $('div.container div.main div.page-info');
-							var getUpload = $('div.container div.main div.page-uploader');
-							var getName = getInfo.find('h1').find('a').text();
-							var getTags = getInfo.find('a.tag').contents().map(function() {
-								return (this.type === 'text') ? $(this).text() + '' : '';
-							}).get().join(', ');
-							var getArtist = getInfo.find('a[href^="/tacgia="]').contents().map(function () {
-								return (this.type === 'text') ? $(this).text() + '' : '';
-							}).get().join(', ');
-							var getChar = getInfo.find('a[href^="/char="]').contents().map(function () {
-								return (this.type === 'text') ? $(this).text() + '' : '';
-							}).get().join(', ');
-							if (getChar == '') getChar = 'Original';
-							var getLikes = getUpload.find('div.but_like').text();
-							var getDislikes = getUpload.find('div.but_unlike').text();
-							return api.sendMessage("Tên: " + getName.substring(1), threadID, () => {
-								api.sendMessage("Tác giả: " + getArtist, threadID, () => {
-									api.sendMessage("Nhân vật: " + getChar, threadID, () => {
-										api.sendMessage("Tags: " + getTags, threadID, () => {
-											api.sendMessage("Số Like: " + getLikes.substring(1) + "\nSố Dislike: " + getDislikes.substring(1), threadID, () => {
-												api.sendMessage(getURL.slice(0, 17) + " " + getURL.slice(17), threadID);
-											});
-										});
-									});
-								});
-							}, messageID);
-						}
-					}, (error) => console.log(error));
-				}
-			}, (error) => console.log(error));
-			return;
-		}
 
 		//porn pics
 		if (contentMessage.indexOf(`${prefix}porn`) == 0) {
@@ -2135,6 +2055,7 @@ if (contentMessage.indexOf(`${prefix}all`) == 0)
 				User.getName(senderID).then((name) => {
 				return api.sendMessage({
 					body: name + `, Trình độ anh hùng bàn phím của bạn đã lên level ${level}`,
+					attachment: fs.createReadStream(__dirname + "/src/levelup.gif"),
 					mentions: [{
 						tag: name,
 						id: senderID,
