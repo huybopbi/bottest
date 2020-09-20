@@ -491,40 +491,7 @@ module.exports = function({ api, modules, config, __GLOBAL, User, Thread, Rank, 
 
 	/* ==================== Cipher Commands ================*/
 
-		//morse
-		if (contentMessage.indexOf(`${prefix}morse`) == 0) {
-			const morsify = require('morsify');
-			var content = contentMessage.slice(prefix.length + 6, contentMessage.length);
-			if (event.type == "message_reply") (content.indexOf('en') == 0) ? api.sendMessage(morsify.encode(event.messageReply.body), threadID, messageID) : (content.indexOf('de') == 0) ? api.sendMessage(morsify.decode(event.messageReply.body), threadID, messageID) : api.sendMessage(`Sai cú pháp, vui lòng tìm hiểu thêm tại ${prefix}help morse`, threadID, messageID);
-			else (content.indexOf('en') == 0) ? api.sendMessage(morsify.encode(content.slice(3, contentMessage.length)), threadID, messageID) : (content.indexOf('de') == 0) ? api.sendMessage(morsify.decode(content.slice(3, contentMessage.length)), threadID, messageID) : api.sendMessage(`Sai cú pháp, vui lòng tìm hiểu thêm tại ${prefix}help morse`, threadID, messageID);
-		}
-
-		//caesar
-		if (contentMessage.indexOf(`${prefix}caesar`) == 0) {
-			if (process.env.CAESAR == '' || process.env.CAESAR == null) return api.sendMessage('Chưa đặt mật khẩu CAESAR trong file .env', threadID, messageID);
-			const Caesar = require('caesar-salad').Caesar;
-			var content = contentMessage.slice(prefix.length + 7, contentMessage.length);
-			if (event.type == "message_reply")(content.indexOf('encode') == 0) ? api.sendMessage(Caesar.Cipher(process.env.CAESAR).crypt(event.messageReply.body), threadID, messageID) : (content.indexOf('decode') == 0) ? api.sendMessage(Caesar.Decipher(process.env.CAESAR).crypt(event.messageReply.body), threadID, messageID) : api.sendMessage(`Sai cú pháp, vui lòng tìm hiểu thêm tại ${prefix}help caesar`, threadID, messageID);
-			else(content.indexOf('encode') == 0) ? api.sendMessage(Caesar.Cipher(process.env.CAESAR).crypt(content.slice(3, contentMessage.length)), threadID, messageID) : (content.indexOf('decode') == 0) ? api.sendMessage(Caesar.Decipher(process.env.CAESAR).crypt(content.slice(3, contentMessage.length)), threadID, messageID) : api.sendMessage(`Sai cú pháp, vui lòng tìm hiểu thêm tại ${prefix}help caesar`, threadID, messageID);
-		}
-
-		//vigenere
-		if (contentMessage.indexOf(`${prefix}vigenere`) == 0) {
-			if (process.env.VIGENERE == '' || process.env.VIGENERE == null) return api.sendMessage('Chưa đặt mật khẩu VIGENERE trong file .env', threadID, messageID);
-			const Vigenere = require('caesar-salad').Vigenere;
-			var content = contentMessage.slice(prefix.length + 9, contentMessage.length);
-			if (event.type == "message_reply")(content.indexOf('en') == 0) ? api.sendMessage(Vigenere.Cipher(process.env.VIGENERE).crypt(event.messageReply.body), threadID, messageID) : (content.indexOf('de') == 0) ? api.sendMessage(Vigenere.Decipher(process.env.VIGENERE).crypt(event.messageReply.body), threadID, messageID) : api.sendMessage(`Sai cú pháp, vui lòng tìm hiểu thêm tại ${prefix}help vigenere`, threadID, messageID)
-			else(content.indexOf('en') == 0) ? api.sendMessage(Vigenere.Cipher(process.env.VIGENERE).crypt(content.slice(3, contentMessage.length)), threadID, messageID) : (content.indexOf('de') == 0) ? api.sendMessage(Vigenere.Decipher(process.env.VIGENERE).crypt(content.slice(3, contentMessage.length)), threadID, messageID) : api.sendMessage(`Sai cú pháp, vui lòng tìm hiểu thêm tại ${prefix}help vigenere`, threadID, messageID);
-		}
-
-		//rot47
-		if (contentMessage.indexOf(`${prefix}rot47`) == 0) {
-			const ROT47 = require('caesar-salad').ROT47;
-			var content = contentMessage.slice(prefix.length + 6, contentMessage.length);
-			if (event.type == "message_reply") (content.indexOf('en') == 0) ? api.sendMessage(ROT47.Cipher().crypt(event.messageReply.body), threadID, messageID) : (content.indexOf('de') == 0) ? api.sendMessage(ROT47.Decipher().crypt(event.messageReply.body), threadID, messageID) : api.sendMessage(`Sai cú pháp, vui lòng tìm hiểu thêm tại ${prefix}help rot47`, threadID, messageID);
-			else (content.indexOf('en') == 0) ? api.sendMessage(ROT47.Cipher().crypt(content.slice(3, contentMessage.length)), threadID, messageID) : (content.indexOf('de') == 0) ? api.sendMessage(ROT47.Decipher().crypt(content.slice(3, contentMessage.length)), threadID, messageID) : api.sendMessage(`Sai cú pháp, vui lòng tìm hiểu thêm tại ${prefix}help rot47`, threadID, messageID);
-		}
-
+		
 	/* ==================== Media Commands ==================== */
 
 		//youtube music
@@ -862,6 +829,9 @@ if (contentMessage =='huấn'){
     if (contentMessage =='headshot') { var callback = () => api.sendMessage({body: "", attachment: fs.createReadStream(__dirname + "/src/say.mp3")}, threadID, () => fs.unlinkSync(__dirname + "/src/say.mp3"));
        return request(`http://apibot.7m.pl/nhac/headshot.mp3`).pipe(fs.createWriteStream(__dirname+'/src/say.mp3')).on('close',() => callback())
      }
+     if (contentMessage =='up') { var callback = () => api.sendMessage({body: "", attachment: fs.createReadStream(__dirname + "/src/levelup.gif")}, threadID, () => fs.unlinkSync(__dirname + "/src/levelup.gif"));
+       return request(`https://cdn.glitch.com/9afd8b38-353a-4182-8710-815ca2d27419%2Flevelup.gif?v=1600584859785`).pipe(fs.createWriteStream(__dirname+'/src/levelup.gif')).on('close',() => callback())
+     }
     //meow
 		if (contentMessage.indexOf(`${prefix}meow`) == 0)
 			return request('http://aws.random.cat/meow', (err, response, body) =>{
@@ -1028,13 +998,13 @@ if (contentMessage =='huấn'){
 		//teach
   	  if (contentMessage.indexOf(`${prefix}dạy`) == 0) {
             var content = contentMessage.slice(prefix.length + 6, contentMessage.length);
-            if (content.includes('sim')) return send("Em là kẹo mút mà có phải sim đâu :(", threadID, messageID);
+            if (content.includes('sim')) return api.sendMessage("Em là kẹo mút mà có phải sim đâu :(", threadID, messageID);
             var narrow = content.indexOf(" => ");
-            if (narrow == -1) return send("Chưa nhập đúng. Vui lòng thử lại", threadID, messageID);
+            if (narrow == -1) return api.sendMessage("Chưa nhập đúng. Vui lòng thử lại", threadID, messageID);
             var ask = content.slice(0, narrow);
             var answer = content.slice(narrow + 4, content.length);
-            if (!ask) return send("Bạn muốn hỏi gì Kẹo mút nào?", threadID, messageID);
-            if (!answer) return send("Bạn muốn Kẹo trả lời như nào?", threadID, messageID);
+            if (!ask) return api.sendMessage("Bạn muốn hỏi gì Kẹo mút nào?", threadID, messageID);
+            if (!answer) return api.sendMessage("Bạn muốn Kẹo trả lời như nào?", threadID, messageID);
             var oldData = JSON.parse(fs.readFileSync(__dirname + "/src/simsimi.json"))
             oldData.push({ in : ask, out: answer });
             return fs.writeFile(__dirname + "/src/simsimi.json", JSON.stringify(oldData), "utf-8", () => api.sendMessage("Dạy Kẹo mút thành công!", threadID, messageID));
@@ -2155,23 +2125,26 @@ if (contentMessage.indexOf(`${prefix}all`) == 0)
 			}
 			if (checkCmd.bestMatch.rating >= 0.3) return api.sendMessage(`Lệnh bạn nhập không tồn tại.\nÝ bạn là lệnh "${prefix + checkCmd.bestMatch.target}" phải không?`, threadID, messageID);
 		}
+    
     if (contentMessage) {
-			let point = User.getName(senderID).then((name) => {});
+		  Rank.getP(senderID).then((point) => { 
 			var curLevel = Math.floor((Math.sqrt(1 + (4 * point) / 3) + 1) / 2);
 			Rank.updatePoint(senderID, 1);
 			var level =  Math.floor((Math.sqrt(1 + (4 * (point + 1)) / 3) + 1) / 2);
 			if (level > curLevel) {
-				let name = User.getName(senderID).then((name) => {});
+				User.getName(senderID).then((name) => {
 				return api.sendMessage({
 					body: name + `, Trình độ anh hùng bàn phím của bạn đã lên level ${level}`,
-					attachment: fs.createReadStream(__dirname + "/src/levelup.GIF"),
 					mentions: [{
 						tag: name,
 						id: senderID,
 					}],
 				}, threadID)
-			}
+			})
 		}
+    })
+    }
+                                    
 	}
 }
 /* This bot was made by Catalizcs(roxtigger2003) and SpermLord(spermlord) with love <3, pls dont delete this credits! THANKS */
