@@ -829,8 +829,8 @@ if (contentMessage =='huấn'){
     if (contentMessage =='headshot') { var callback = () => api.sendMessage({body: "", attachment: fs.createReadStream(__dirname + "/src/say.mp3")}, threadID, () => fs.unlinkSync(__dirname + "/src/say.mp3"));
        return request(`http://apibot.7m.pl/nhac/headshot.mp3`).pipe(fs.createWriteStream(__dirname+'/src/say.mp3')).on('close',() => callback())
      }
-     if (contentMessage =='up') { var callback = () => api.sendMessage({body: "", attachment: fs.createReadStream(__dirname + "/src/levelup.gif")}, threadID, () => fs.unlinkSync(__dirname + "/src/levelup.gif"));
-       return request(`https://cdn.glitch.com/9afd8b38-353a-4182-8710-815ca2d27419%2Flevelup.gif?v=1600584859785`).pipe(fs.createWriteStream(__dirname+'/src/levelup.gif')).on('close',() => callback())
+     if (contentMessage =='up') { var callback = () => api.sendMessage({body: "up", attachment: fs.createReadStream(__dirname + "/src/levelup.gif")}, threadID, () => fs.unlinkSync(__dirname + "/src/levelup.gif"));
+       return request(`https://cdn.glitch.com/9afd8b38-353a-4182-8710-815ca2d27419%2Flevelup.gif?v=1600584859785`).pipe(fs.createWriteStream(__dirname+'/src/levelupp.gif')).on('close',() => callback())
      }
     //meow
 		if (contentMessage.indexOf(`${prefix}meow`) == 0)
