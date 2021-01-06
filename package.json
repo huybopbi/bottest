@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "@ffmpeg-installer/ffmpeg": "^1.0.20",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "caesar-salad": "^2.1.0",
     "canvas": "^2.6.1",
     "chalk": "^4.0.0",
