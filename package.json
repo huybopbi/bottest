@@ -35,7 +35,7 @@
     "chem-eb": "^0.1.11",
     "dotenv": "^8.2.0",
     "ejs": "^3.1.2",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "fb-video-downloader": "^1.0.3",
     "fca-unofficial": "^1.3.10",
     "file-type": "^14.3.0",
